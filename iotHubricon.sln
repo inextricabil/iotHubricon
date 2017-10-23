@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iotHubricon", "iotHubricon\iotHubricon.csproj", "{A68AEFD3-E157-44CA-8F6A-F5603369C6FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iotHubricon.Tests", "iotHubricon.Tests\iotHubricon.Tests.csproj", "{348A5593-9293-477A-BE0A-DF9EBE169A2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A68AEFD3-E157-44CA-8F6A-F5603369C6FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A68AEFD3-E157-44CA-8F6A-F5603369C6FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A68AEFD3-E157-44CA-8F6A-F5603369C6FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A68AEFD3-E157-44CA-8F6A-F5603369C6FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{348A5593-9293-477A-BE0A-DF9EBE169A2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{348A5593-9293-477A-BE0A-DF9EBE169A2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{348A5593-9293-477A-BE0A-DF9EBE169A2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{348A5593-9293-477A-BE0A-DF9EBE169A2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {085ED2D7-AA75-411D-82B3-00FC905538B2}
+	EndGlobalSection
+EndGlobal
