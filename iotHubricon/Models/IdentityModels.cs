@@ -29,5 +29,7 @@ namespace iotHubricon.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<iotHubricon.Models.SensorRecord> SensorRecords { get; set; }
     }
 }
