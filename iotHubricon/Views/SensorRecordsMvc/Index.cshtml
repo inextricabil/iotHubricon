@@ -1,0 +1,39 @@
+﻿@model IEnumerable<iotHubricon.Models.SensorRecord>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Temperature)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Humidity)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Temperature)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Humidity)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.SensorId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.SensorId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SensorId })
+        </td>
+    </tr>
+}
+
+</table>
