@@ -31,5 +31,7 @@ namespace iotHubricon.Models
         }
 
         public System.Data.Entity.DbSet<iotHubricon.Models.SensorRecord> SensorRecords { get; set; }
+
+        public System.Data.Entity.DbSet<iotHubricon.Models.Sensor> Sensors { get; set; }
     }
 }

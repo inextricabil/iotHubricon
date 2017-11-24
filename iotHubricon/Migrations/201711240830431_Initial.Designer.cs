@@ -13,7 +13,7 @@ namespace iotHubricon.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201711101621429_Initial"; }
+            get { return "201711240830431_Initial"; }
         }
         
         string IMigrationMetadata.Source

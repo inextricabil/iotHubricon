@@ -34,9 +34,22 @@ namespace iotHubricon.Migrations
                 "dbo.SensorRecords",
                 c => new
                     {
+                        SensorRecordId = c.Guid(nullable: false),
                         SensorId = c.Guid(nullable: false),
                         Temperature = c.Single(nullable: false),
                         Humidity = c.Single(nullable: false),
+                    })
+                .PrimaryKey(t => t.SensorRecordId);
+            
+            CreateTable(
+                "dbo.Sensors",
+                c => new
+                    {
+                        SensorId = c.Guid(nullable: false),
+                        Name = c.String(),
+                        Latitude = c.Single(nullable: false),
+                        Longitude = c.Single(nullable: false),
+                        Location = c.String(),
                     })
                 .PrimaryKey(t => t.SensorId);
             
@@ -102,6 +115,7 @@ namespace iotHubricon.Migrations
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
+            DropTable("dbo.Sensors");
             DropTable("dbo.SensorRecords");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");

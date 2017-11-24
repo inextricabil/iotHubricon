@@ -1,0 +1,115 @@
+﻿@model IEnumerable<iotHubricon.Models.Sensor>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Map</h2>
+
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Latitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Longitude)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Location)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.SensorId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.SensorId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.SensorId })
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<hr/>
+
+<div id="map"></div>
+
+
+<script>
+    var map;
+    function initMap() {
+        var sensors = @Html.Raw(Json.Encode(Model));
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 7,
+            center: new google.maps.LatLng(46, 25), //Romania
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < sensors.length; i++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(sensors[i]["Latitude"], sensors[i]["Longitude"]),
+                map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                return function() {
+                    infowindow.setContent("Nume: " + sensors[i]["Name"] + " Locatie: " + sensors[i]["Location"] );
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+        }
+
+        //var map = new google.maps.Map(document.getElementById('map'), {
+        //    zoom: 7,
+        //    center: myLatLng
+        //});
+
+
+        //debugger;
+
+        //var marker = new google.maps.Marker({
+        //    position: myLatLng,
+        //    map: map,
+        //    title: 'Hello World!'
+        //});
+    };
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUEbsvVsAnGW-dUIftVwbxlor0uQHdJcg&callback=initMap"
+        async defer></script>
+
+<style>
+    #map {
+        position: absolute;
+        height: 51%;
+        width: 59.375%;
+    }
+
+</style>
