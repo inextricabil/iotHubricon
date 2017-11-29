@@ -11,5 +11,6 @@ namespace iotHubricon.Models
         public float Temperature { get; set; }
         [DisplayFormat(DataFormatString = "{0:0.##}")]
         public float Humidity { get; set; }
+        public DateTime Date { get; set; }
     }
 }

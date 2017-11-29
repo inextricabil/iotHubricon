@@ -203,9 +203,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SensorsController.cs" />
-    <Compile Include="Migrations\201711240830431_Initial.cs" />
-    <Compile Include="Migrations\201711240830431_Initial.Designer.cs">
-      <DependentUpon>201711240830431_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201711291304432_Initial.cs" />
+    <Compile Include="Migrations\201711291304432_Initial.Designer.cs">
+      <DependentUpon>201711291304432_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Point.cs" />
@@ -309,8 +309,8 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201711240830431_Initial.resx">
-      <DependentUpon>201711240830431_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201711291304432_Initial.resx">
+      <DependentUpon>201711291304432_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

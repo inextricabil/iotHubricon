@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<iotHubricon.Models.Sensor>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Sensors";
 }
 
 
@@ -89,9 +89,26 @@
             markers.push(marker);
 
             google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                return function() {
-                    infowindow.setContent("Nume: " + sensors[i]["Name"] + " Locatie: " + sensors[i]["Location"] );
+                return function () {
+                    var content =
+                        "<div class=\"tab\">" +
+                            "<button class=\"tablinks active\"onclick=\"openTab(event, 'Temeprature')\">Temeprature</button>" +
+                            "<button class=\"tablinks\" onclick=\"openTab(event, 'Humidity')\">Humidity</button>" + 
+                            "</div>" +
+                            "<div id=\"Temeprature\" class=\"tabcontent\" style=\"display: block\">" +
+                            "<h3>Temeprature</h3>" +
+                            "<p>London is the capital city of England.</p>" +
+                            "</div>" +
+                            "<div id=\"Humidity\" class=\"tabcontent\">" +
+                            "<h3>Humidity</h3>" + 
+                            "<p>Paris is the capital of France.</p>" +
+                            "</div>";
+
+
+                    //infowindow.setContent("Nume: " + sensors[i]["Name"] + " Locatie: " + sensors[i]["Location"] );
+                    infowindow.setContent(content);
                     infowindow.open(map, marker);
+
                 }
             })(marker, i));
         }
@@ -102,36 +119,39 @@
         }
 
         map.fitBounds(bounds);
-
-        //var map = new google.maps.Map(document.getElementById('map'), {
-        //    zoom: 7,
-        //    center: myLatLng
-        //});
-
-
-        //debugger;
-
-        //var marker = new google.maps.Marker({
-        //    position: myLatLng,
-        //    map: map,
-        //    title: 'Hello World!'
-        //});
     };
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUEbsvVsAnGW-dUIftVwbxlor0uQHdJcg&callback=initMap"
         async defer></script>
 
-<style>
-    #map {
-        position: absolute;
-        height: 51%;
-        width: 59.375%;
-    }
+<script>
+    function openTab(evt, tabName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
 
-    #footerParagraph {
-        position: absolute;
-        bottom: 0;
-    }
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
 
-</style>
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+<script>
+    function setDefaultTab() {
+        $("#defaultActiveTab").style.display = "block";
+        $("#defaultActiveLink").className += "active";
+    }
+</script>
+

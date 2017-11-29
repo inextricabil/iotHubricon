@@ -38,6 +38,7 @@ namespace iotHubricon.Migrations
                         SensorId = c.Guid(nullable: false),
                         Temperature = c.Single(nullable: false),
                         Humidity = c.Single(nullable: false),
+                        Date = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.SensorRecordId);
             
