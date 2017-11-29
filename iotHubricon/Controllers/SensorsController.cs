@@ -90,9 +90,12 @@ namespace iotHubricon.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SensorId,Name,Latitude,Longitude,Location")] Sensor sensor)
         {
-            if (ModelState.IsValid)
+            if (sensor.SensorId == Guid.Empty)
             {
                 sensor.SensorId = Guid.NewGuid();
+            }
+            if (ModelState.IsValid)
+            {
                 db.Sensors.Add(sensor);
                 db.SaveChanges();
                 return RedirectToAction("Index");
