@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -56,16 +55,10 @@ namespace iotHubricon.Controllers
             {
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException e)
             {
-                if (!SensorRecordExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                Trace.WriteLine(DateTime.Now + e.Message);
+                return InternalServerError();
             }
 
             return StatusCode(HttpStatusCode.NoContent);
@@ -75,6 +68,8 @@ namespace iotHubricon.Controllers
         [ResponseType(typeof(SensorRecord))]
         public async Task<IHttpActionResult> PostSensorRecord(SensorRecord sensorRecord)
         {
+            sensorRecord.SensorRecordId = Guid.NewGuid();
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -86,16 +81,10 @@ namespace iotHubricon.Controllers
             {
                 await db.SaveChangesAsync();
             }
-            catch (DbUpdateException)
-            {
-                if (SensorRecordExists(sensorRecord.SensorId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+            catch (DbUpdateException e)
+            { 
+                Trace.WriteLine(DateTime.Now + e.Message);
+                return InternalServerError();
             }
 
             return CreatedAtRoute("DefaultApi", new { id = sensorRecord.SensorId }, sensorRecord);
@@ -124,11 +113,6 @@ namespace iotHubricon.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
-        }
-
-        private bool SensorRecordExists(Guid id)
-        {
-            return db.SensorRecords.Count(e => e.SensorId == id) > 0;
         }
     }
 }
