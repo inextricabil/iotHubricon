@@ -105,37 +105,48 @@
                 return function () {
 
                     var sensorId = this.sensorId;
-                    var temperatureAverage = sensorsTemperatureAverages[sensorId];
-                    var humidityAverage = sensorsHumidityAverages[sensorId];
+                    var temperatureAverage = sensorsTemperatureAverages[sensorId] || 0;
+                    var humidityAverage = sensorsHumidityAverages[sensorId] || 0;
 
 
                     //var lastTemperatureRecords = [{ Value: 10, Date: "11/29/2017 3:08:36 PM" }, { Value: 22, Date: "11/29/2017 4:08:36 PM" }];
                     var lastTemperatureRecords = this.lastTemperatureRecords;
                     var lastHumidityRecords = this.lastHumidityRecords;
 
+                    
                     var temperatureContent = "<p>Media temperaturilor pentru ultima luna: <b>" + temperatureAverage + "&#8451 </b></p> ";
                     temperatureContent += "<p>Ultimele valori primite: </p> ";
                     temperatureContent += "<ul>"
-                    for (let i = 0; i < lastTemperatureRecords.length; i++) {
-                        temperatureContent += "<li><b>" +
-                            specialEpochToDatetime(lastTemperatureRecords[i].Date) +
-                            "</b> - Temperatura:<b> " +
-                            lastTemperatureRecords[i].Value +
-                            " &#8451" +
-                            "</b></li>";
+
+                    if (lastTemperatureRecords !== null && lastTemperatureRecords !== undefined)
+                    {
+                        for (let i = 0; i < lastTemperatureRecords.length; i++) {
+                            temperatureContent += "<li><b>" +
+                                specialEpochToDatetime(lastTemperatureRecords[i].Date) +
+                                "</b> - Temperatura:<b> " +
+                                lastTemperatureRecords[i].Value +
+                                " &#8451" +
+                                "</b></li>";
+                        }
+                        temperatureContent += "<ul>";
                     }
-                    temperatureContent += "<ul>"
+
 
 
                     //var lastHumidityRecords = [{ Value: 50, Date: "11/29/2017 3:08:36 PM" }, { Value: 55, Date: "11/29/2017 4:08:36 PM"}];
 
                     var humidityContent = "<p>Media umiditatii pentru ultima luna: <b>" + humidityAverage + "% </b></p> ";
                     humidityContent += "<p>Ultimele valori primite: </p> ";
-                    humidityContent += "<ul>"
-                    for (let i = 0; i < lastHumidityRecords.length; i++) {
-                        humidityContent += "<li><b>" + specialEpochToDatetime(lastHumidityRecords[i].Date) + "</b> - Umiditate: <b> " + lastHumidityRecords[i].Value + "% </b></li>"
+                    humidityContent += "<ul>";
+
+                    if (lastHumidityRecords !== null && lastHumidityRecords !== undefined)
+                    {
+                        for (let i = 0; i < lastHumidityRecords.length; i++) {
+                            humidityContent += "<li><b>" + specialEpochToDatetime(lastHumidityRecords[i].Date) + "</b> - Umiditate: <b> " + lastHumidityRecords[i].Value + "% </b></li>"
+                        }
+                        humidityContent += "</ul>";
                     }
-                    humidityContent += "</ul>"
+
 
 
                     var content = "<p><b>Nume</b>: " + sensors[i]["Name"] + " </p>" +
