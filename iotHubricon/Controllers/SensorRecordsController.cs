@@ -57,7 +57,7 @@ namespace iotHubricon.Controllers
             }
             catch (DbUpdateConcurrencyException e)
             {
-                Trace.WriteLine(DateTime.Now + e.Message);
+                Trace.WriteLine(DateTime.UtcNow + e.Message);
                 return InternalServerError();
             }
 
@@ -84,7 +84,7 @@ namespace iotHubricon.Controllers
             }
             catch (DbUpdateException e)
             { 
-                Trace.WriteLine(DateTime.Now + e.Message);
+                Trace.WriteLine(DateTime.UtcNow + e.Message);
                 return InternalServerError();
             }
 

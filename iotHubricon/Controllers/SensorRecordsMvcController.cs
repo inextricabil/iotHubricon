@@ -46,7 +46,7 @@ namespace iotHubricon.Controllers
         public ActionResult Create([Bind(Include = "SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
         {
             sensorRecord.SensorRecordId = Guid.NewGuid();
-            sensorRecord.Date = DateTime.Now;
+            sensorRecord.Date = DateTime.UtcNow;
 
             if (ModelState.IsValid)
             {
@@ -81,7 +81,7 @@ namespace iotHubricon.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "SensorRecordId, SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
         {
-            sensorRecord.Date = DateTime.Now;
+            sensorRecord.Date = DateTime.UtcNow;
             if (ModelState.IsValid)
             {
                 db.Entry(sensorRecord).State = EntityState.Modified;

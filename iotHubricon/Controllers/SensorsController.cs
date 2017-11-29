@@ -31,7 +31,7 @@ namespace iotHubricon.Controllers
                 {
                     var sensorRecords = records.Where(s => s.SensorId == sensor.SensorId).ToList();
 
-                    var lastMonthSensorRecords = sensorRecords.Where(s => s.Date > DateTime.Now.AddMonths(-12)).ToList();
+                    var lastMonthSensorRecords = sensorRecords.Where(s => s.Date > DateTime.UtcNow.AddMonths(-12)).ToList();
 
                     var sensorHumidityAverage = lastMonthSensorRecords.Average(s => s.Humidity);
                     var sensorTemperatureAverage = lastMonthSensorRecords.Average(s => s.Temperature);
