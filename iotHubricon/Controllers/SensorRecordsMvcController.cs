@@ -48,6 +48,7 @@ namespace iotHubricon.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
         {
+            sensorRecord.SensorRecordId = Guid.NewGuid();
             if (ModelState.IsValid)
             {
                 sensorRecord.SensorId = Guid.NewGuid();
@@ -79,7 +80,7 @@ namespace iotHubricon.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
+        public ActionResult Edit([Bind(Include = "SensorRecordId, SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
         {
             if (ModelState.IsValid)
             {
