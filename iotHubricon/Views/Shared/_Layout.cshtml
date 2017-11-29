@@ -36,7 +36,11 @@
         @RenderBody()
         <hr class="footer"/>
         <footer>
-            <p class="footer">&copy; @DateTime.UtcNow.Year - My ASP.NET Application</p>
+            @{
+                var myTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
+                var currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, myTimeZone);
+            }
+            <p class="footer">&copy; @currentDateTime.Year - My ASP.NET Application</p>
         </footer>
     </div>
 

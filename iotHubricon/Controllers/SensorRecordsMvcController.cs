@@ -46,7 +46,9 @@ namespace iotHubricon.Controllers
         public ActionResult Create([Bind(Include = "SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
         {
             sensorRecord.SensorRecordId = Guid.NewGuid();
-            sensorRecord.Date = DateTime.UtcNow;
+            var myTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
+            var currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, myTimeZone);
+            sensorRecord.Date = currentDateTime;
 
             if (ModelState.IsValid)
             {
@@ -81,7 +83,9 @@ namespace iotHubricon.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "SensorRecordId, SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
         {
-            sensorRecord.Date = DateTime.UtcNow;
+            var myTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
+            var currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, myTimeZone);
+            sensorRecord.Date = currentDateTime;
             if (ModelState.IsValid)
             {
                 db.Entry(sensorRecord).State = EntityState.Modified;

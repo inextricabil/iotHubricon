@@ -31,7 +31,9 @@ namespace iotHubricon.Controllers
                 {
                     var sensorRecords = records.Where(s => s.SensorId == sensor.SensorId).ToList();
 
-                    var lastMonthSensorRecords = sensorRecords.Where(s => s.Date > DateTime.UtcNow.AddMonths(-12)).ToList();
+                    var myTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
+                    var currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, myTimeZone);
+                    var lastMonthSensorRecords = sensorRecords.Where(s => s.Date > currentDateTime.AddMonths(-12)).ToList();
 
                     var sensorHumidityAverage = lastMonthSensorRecords.Average(s => s.Humidity);
                     var sensorTemperatureAverage = lastMonthSensorRecords.Average(s => s.Temperature);

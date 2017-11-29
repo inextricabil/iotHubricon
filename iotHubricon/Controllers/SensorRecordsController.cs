@@ -57,7 +57,9 @@ namespace iotHubricon.Controllers
             }
             catch (DbUpdateConcurrencyException e)
             {
-                Trace.WriteLine(DateTime.UtcNow + e.Message);
+                var myTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
+                var currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, myTimeZone);
+                Trace.WriteLine(currentDateTime + e.Message);
                 return InternalServerError();
             }
 
@@ -69,7 +71,9 @@ namespace iotHubricon.Controllers
         public async Task<IHttpActionResult> PostSensorRecord(SensorRecord sensorRecord)
         {
             sensorRecord.SensorRecordId = Guid.NewGuid();
-            sensorRecord.Date = DateTime.UtcNow;
+            var myTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time");
+            var currentDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, myTimeZone);
+            sensorRecord.Date = currentDateTime;
 
             if (!ModelState.IsValid)
             {
@@ -84,7 +88,7 @@ namespace iotHubricon.Controllers
             }
             catch (DbUpdateException e)
             { 
-                Trace.WriteLine(DateTime.UtcNow + e.Message);
+                Trace.WriteLine(currentDateTime + e.Message);
                 return InternalServerError();
             }
 
