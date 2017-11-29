@@ -69,7 +69,7 @@ namespace iotHubricon.Controllers
         public async Task<IHttpActionResult> PostSensorRecord(SensorRecord sensorRecord)
         {
             sensorRecord.SensorRecordId = Guid.NewGuid();
-            sensorRecord.Date = DateTime.Now;
+            sensorRecord.Date = DateTime.UtcNow;
 
             if (!ModelState.IsValid)
             {
