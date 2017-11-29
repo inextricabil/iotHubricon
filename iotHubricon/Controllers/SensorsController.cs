@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -17,7 +18,48 @@ namespace iotHubricon.Controllers
         // GET: Sensors
         public ActionResult Index()
         {
-            return View(db.Sensors.ToList());
+            var records = db.SensorRecords.ToList();
+
+            var model = new SensorViewModel
+            {
+                Sensors = db.Sensors.ToList()
+            };
+
+            foreach (var sensor in model.Sensors)
+            {
+                try
+                {
+                    var sensorRecords = records.Where(s => s.SensorId == sensor.SensorId).ToList();
+
+                    var lastMonthSensorRecords = sensorRecords.Where(s => s.Date > DateTime.Now.AddMonths(-12)).ToList();
+
+                    var sensorHumidityAverage = lastMonthSensorRecords.Average(s => s.Humidity);
+                    var sensorTemperatureAverage = lastMonthSensorRecords.Average(s => s.Temperature);
+
+                    model.HumidityAverage.Add(sensor.SensorId.ToString(), sensorHumidityAverage);
+                    model.TemperatureAverage.Add(sensor.SensorId.ToString(), sensorTemperatureAverage);
+
+                    var lastFiveRecords = sensorRecords.OrderByDescending(p => p.Date).Take(5).ToList();
+
+                    var sensorDateTemperatureValuesList = new List<DateValueRecord>();
+                    var sensorDateHumidityValuesList = new List<DateValueRecord>();
+
+                    foreach (var record in lastFiveRecords)
+                    {
+                        sensorDateTemperatureValuesList.Add(new DateValueRecord(record.Date, record.Temperature));
+                        sensorDateHumidityValuesList.Add(new DateValueRecord(record.Date, record.Humidity));
+                    }
+
+                    model.LastHumidityRecords.Add(sensor.SensorId.ToString(), sensorDateHumidityValuesList);
+                    model.LastTemperatureRecords.Add(sensor.SensorId.ToString(), sensorDateTemperatureValuesList);
+                }
+                catch (Exception e)
+                {
+                    Trace.WriteLine(e);
+                }
+
+            }
+            return View(model);
         }
 
         // GET: Sensors/Details/5

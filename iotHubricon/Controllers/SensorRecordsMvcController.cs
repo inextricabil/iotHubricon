@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using iotHubricon.Models;
 
@@ -17,7 +14,7 @@ namespace iotHubricon.Controllers
         // GET: SensorRecordsMvc
         public ActionResult Index()
         {
-            return View(db.SensorRecords.ToList());
+            return View(db.SensorRecords.OrderByDescending(p => p.Date).ToList());
         }
 
         // GET: SensorRecordsMvc/Details/5
@@ -49,6 +46,8 @@ namespace iotHubricon.Controllers
         public ActionResult Create([Bind(Include = "SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
         {
             sensorRecord.SensorRecordId = Guid.NewGuid();
+            sensorRecord.Date = DateTime.Now;
+
             if (ModelState.IsValid)
             {
                 sensorRecord.SensorId = Guid.NewGuid();
@@ -82,6 +81,7 @@ namespace iotHubricon.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "SensorRecordId, SensorId,Temperature,Humidity")] SensorRecord sensorRecord)
         {
+            sensorRecord.Date = DateTime.Now;
             if (ModelState.IsValid)
             {
                 db.Entry(sensorRecord).State = EntityState.Modified;

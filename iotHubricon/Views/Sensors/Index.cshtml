@@ -1,4 +1,4 @@
-﻿@model IEnumerable<iotHubricon.Models.Sensor>
+﻿@model iotHubricon.Models.SensorViewModel
 
 @{
     ViewBag.Title = "Sensors";
@@ -11,31 +11,31 @@
 
 <h2>Map</h2>
 
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Sensors[0].Name)
         </th>
 
         <th>
-            @Html.DisplayNameFor(model => model.SensorId)
+            @Html.DisplayNameFor(model => model.Sensors[0].SensorId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Latitude)
+            @Html.DisplayNameFor(model => model.Sensors[0].Latitude)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Longitude)
+            @Html.DisplayNameFor(model => model.Sensors[0].Longitude)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayNameFor(model => model.Sensors[0].Location)
         </th>
         <th></th>
     </tr>
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.Sensors)
     {
         <tr>
             <td>
@@ -65,10 +65,20 @@
 
 <div id="map"></div>
 
+<script src="~/Content/moment-with-locales.min.js"></script>
+
 <script>
     var map;
     function initMap() {
-        var sensors = @Html.Raw(Json.Encode(Model));
+
+        var sensors = @Html.Raw(Json.Encode(Model.Sensors));
+        var sensorsTemperatureAverages = @Html.Raw(Json.Encode(Model.TemperatureAverage));
+        var sensorsHumidityAverages = @Html.Raw(Json.Encode(Model.HumidityAverage));
+        var lastTemperatureRecords = @Html.Raw(Json.Encode(Model.LastTemperatureRecords));
+        var lastHumidityRecords = @Html.Raw(Json.Encode(Model.LastHumidityRecords));
+
+        debugger;
+
 
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
@@ -84,24 +94,64 @@
         for (i = 0; i < sensors.length; i++) {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(sensors[i]["Latitude"], sensors[i]["Longitude"]),
-                map: map
+                map: map,
+                sensorId: sensors[i].SensorId,
+                lastHumidityRecords: lastHumidityRecords[sensors[i].SensorId],
+                lastTemperatureRecords: lastTemperatureRecords[sensors[i].SensorId]
             });
             markers.push(marker);
 
             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                 return function () {
-                    var content =
+
+                    var sensorId = this.sensorId;
+                    var temperatureAverage = sensorsTemperatureAverages[sensorId];
+                    var humidityAverage = sensorsHumidityAverages[sensorId];
+
+
+                    //var lastTemperatureRecords = [{ Value: 10, Date: "11/29/2017 3:08:36 PM" }, { Value: 22, Date: "11/29/2017 4:08:36 PM" }];
+                    var lastTemperatureRecords = this.lastTemperatureRecords;
+                    var lastHumidityRecords = this.lastHumidityRecords;
+
+                    var temperatureContent = "<p>Media temperaturilor pentru ultima luna: <b>" + temperatureAverage + "&#8451 </b></p> ";
+                    temperatureContent += "<p>Ultimele valori primite: </p> ";
+                    temperatureContent += "<ul>"
+                    for (let i = 0; i < lastTemperatureRecords.length; i++) {
+                        temperatureContent += "<li><b>" +
+                            specialEpochToDatetime(lastTemperatureRecords[i].Date) +
+                            "</b> - Temperatura:<b> " +
+                            lastTemperatureRecords[i].Value +
+                            " &#8451" +
+                            "</b></li>";
+                    }
+                    temperatureContent += "<ul>"
+
+
+                    //var lastHumidityRecords = [{ Value: 50, Date: "11/29/2017 3:08:36 PM" }, { Value: 55, Date: "11/29/2017 4:08:36 PM"}];
+
+                    var humidityContent = "<p>Media umiditatii pentru ultima luna: <b>" + humidityAverage + "% </b></p> ";
+                    humidityContent += "<p>Ultimele valori primite: </p> ";
+                    humidityContent += "<ul>"
+                    for (let i = 0; i < lastHumidityRecords.length; i++) {
+                        humidityContent += "<li><b>" + specialEpochToDatetime(lastHumidityRecords[i].Date) + "</b> - Umiditate: <b> " + lastHumidityRecords[i].Value + "% </b></li>"
+                    }
+                    humidityContent += "</ul>"
+
+
+                    var content = "<p><b>Nume</b>: " + sensors[i]["Name"] + " </p>" +
+                        "<p><b>Locatie</b>: " + sensors[i]["Location"]  + "</p> <br>"
+                        +
                         "<div class=\"tab\">" +
-                            "<button class=\"tablinks active\"onclick=\"openTab(event, 'Temeprature')\">Temeprature</button>" +
-                            "<button class=\"tablinks\" onclick=\"openTab(event, 'Humidity')\">Humidity</button>" + 
+                            "<button class=\"tablinks active\"onclick=\"openTab(event, 'Temeprature')\">Temperatura</button>" +
+                            "<button class=\"tablinks\" onclick=\"openTab(event, 'Humidity')\">Umiditate</button>" +
                             "</div>" +
                             "<div id=\"Temeprature\" class=\"tabcontent\" style=\"display: block\">" +
-                            "<h3>Temeprature</h3>" +
-                            "<p>London is the capital city of England.</p>" +
+                            "<h3>Temperatura</h3>" +
+                            temperatureContent +
                             "</div>" +
                             "<div id=\"Humidity\" class=\"tabcontent\">" +
-                            "<h3>Humidity</h3>" + 
-                            "<p>Paris is the capital of France.</p>" +
+                            "<h3>Umiditate</h3>" +
+                            humidityContent +
                             "</div>";
 
 
@@ -120,6 +170,11 @@
 
         map.fitBounds(bounds);
     };
+
+    function specialEpochToDatetime(epoch) {
+        return moment(epoch).lang("ro").format('LLL');
+    }
+
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBUEbsvVsAnGW-dUIftVwbxlor0uQHdJcg&callback=initMap"
@@ -145,13 +200,6 @@
         // Show the current tab, and add an "active" class to the button that opened the tab
         document.getElementById(tabName).style.display = "block";
         evt.currentTarget.className += " active";
-    }
-</script>
-
-<script>
-    function setDefaultTab() {
-        $("#defaultActiveTab").style.display = "block";
-        $("#defaultActiveLink").className += "active";
     }
 </script>
 
