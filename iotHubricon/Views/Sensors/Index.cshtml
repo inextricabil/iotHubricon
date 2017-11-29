@@ -66,8 +66,8 @@
         var sensors = @Html.Raw(Json.Encode(Model));
 
         var map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 7,
-            center: new google.maps.LatLng(46, 25), //Romania
+            zoom: 12,
+            center: new google.maps.LatLng(47.15845, 27.60144), //Iasi, Romania
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
@@ -75,11 +75,13 @@
 
         var marker, i;
 
+        var markers = [];
         for (i = 0; i < sensors.length; i++) {
             marker = new google.maps.Marker({
                 position: new google.maps.LatLng(sensors[i]["Latitude"], sensors[i]["Longitude"]),
                 map: map
             });
+            markers.push(marker);
 
             google.maps.event.addListener(marker, 'click', (function(marker, i) {
                 return function() {
@@ -88,6 +90,13 @@
                 }
             })(marker, i));
         }
+
+        var bounds = new google.maps.LatLngBounds();
+        for (var i = 0; i < markers.length; i++) {
+            bounds.extend(markers[i].getPosition());
+        }
+
+        map.fitBounds(bounds);
 
         //var map = new google.maps.Map(document.getElementById('map'), {
         //    zoom: 7,
